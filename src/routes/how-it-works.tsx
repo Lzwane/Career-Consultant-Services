@@ -25,31 +25,34 @@ export const Route = createFileRoute("/how-it-works")({
 
 const STEPS = [
   {
-    title: "Submit your information",
-    text: "Complete a short form with your name, ID number, contact details and current grade or status.",
+    title: "1. Create Your Account",
+    text: "Register an account or sign in to get personal access to your application portal.",
   },
   {
-    title: "Upload your documents",
-    text: "Attach your ID copy, academic results, matric certificate if you have one, and proof of payment.",
-  },
-  { title: "We assess your results", text: "A consultant reviews your academic record in detail." },
-  {
-    title: "We identify institutions you may qualify for",
-    text: "We record the institutions and programmes that match your results and share them with you.",
+    title: "2. Submit your information & upload documents",
+    text: "Provide your details and attach your ID copy, academic results, matric certificate (if available), and proof of payment.",
   },
   {
-    title: "Our consultants assist with your applications",
-    text: "We use your submitted documents to complete and submit the applications, and keep you updated.",
+    title: "3. We assess your results",
+    text: "A consultant reviews your academic record in detail against current tertiary requirements.",
+  },
+  {
+    title: "4. We identify institutions you may qualify for",
+    text: "We identify universities, technology institutions, and TVET colleges matching your profile and share them with you.",
+  },
+  {
+    title: "5. Our consultants assist with your applications",
+    text: "We use your documents to complete and submit the applications, keeping you informed at every stage.",
   },
 ];
 
 function HowItWorks() {
   return (
     <SiteLayout>
-      <section className="bg-navy-gradient py-14 text-primary-foreground">
-        <div className="mx-auto w-full max-w-4xl px-4">
+      <section className="bg-navy-gradient py-14 text-primary-foreground sm:py-20">
+        <div className="mx-auto w-full max-w-4xl px-4 text-center sm:text-left">
           <h1 className="font-display text-3xl font-extrabold uppercase sm:text-4xl">How It Works</h1>
-          <p className="mt-4 text-primary-foreground/85">From your documents to a submitted application.</p>
+          <p className="mt-4 text-primary-foreground/85">From creating your account to a completed submission.</p>
         </div>
       </section>
 
@@ -85,7 +88,7 @@ function HowItWorks() {
             {DOCUMENT_TYPES.map((doc) => (
               <li key={doc.key} className="rounded-lg border border-border bg-card px-4 py-3 text-sm">
                 <span className="font-semibold text-primary">{doc.label}</span>
-                {doc.required && <span className="ml-2 text-xs uppercase text-accent">Required</span>}
+                {doc.required && <span className="ml-2 text-xs uppercase text-accent font-semibold">Required</span>}
               </li>
             ))}
           </ul>
@@ -107,12 +110,9 @@ function HowItWorks() {
           </div>
         </section>
 
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Button asChild size="lg">
-            <Link to="/submit">Submit Your Documents</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to="/status">Check Where You Qualify</Link>
+        <div className="mt-10">
+          <Button asChild size="lg" className="w-full sm:w-auto">
+            <Link to="/auth">Get Started / Sign In</Link>
           </Button>
         </div>
       </div>

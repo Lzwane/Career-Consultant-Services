@@ -1,107 +1,114 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { LogOut, ShieldAlert, Loader2 } from "lucide-react";
-import type { ReactNode } from "react";
-import logo from "@/assets/ccs-logo.jpeg.asset.json";
+import { 
+  Users, 
+  ShieldCheck, 
+  LogOut, 
+  Menu, 
+  X, 
+  GraduationCap, 
+  ExternalLink,
+  ChevronRight
+} from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { getStaffAccess } from "@/lib/applications.functions";
 import { STATUS_LABELS, type ApplicationStatus } from "@/lib/status";
 
-export function StatusPill({ status }: { status: ApplicationStatus }) {
-  const tone =
-    status === "successful"
-      ? "bg-success text-success-foreground"
-      : status === "unsuccessful"
-        ? "bg-destructive text-destructive-foreground"
-        : status === "additional_documents_required"
-          ? "bg-accent text-accent-foreground"
-          : "bg-secondary text-primary";
+export function StatusPill({ status }: { status: ApplicationStatus | string }) {
+  const label = STATUS_LABELS[status as ApplicationStatus] || status.replace(/_/g, " ");
+  
+  let color = "bg-slate-100 text-slate-700 border-slate-200";
+  if (status === "documents_submitted") color = "bg-amber-50 text-amber-700 border-amber-200";
+  if (status === "under_assessment") color = "bg-blue-50 text-blue-700 border-blue-200";
+  if (status === "institution_identified") color = "bg-purple-50 text-purple-700 border-purple-200";
+  if (status === "application_in_progress") color = "bg-indigo-50 text-indigo-700 border-indigo-200";
+  if (status === "successful") color = "bg-emerald-50 text-emerald-700 border-emerald-200";
+  if (status === "unsuccessful") color = "bg-rose-50 text-rose-700 border-rose-200";
+
   return (
-    <span className={`inline-block whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold ${tone}`}>
-      {STATUS_LABELS[status]}
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold tracking-wide border uppercase ${color}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
+      {label}
     </span>
   );
 }
 
 export function AdminShell({ children }: { children: ReactNode }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const fetchAccess = useServerFn(getStaffAccess);
-  const { data: access, isLoading } = useQuery({
-    queryKey: ["staff-access"],
-    queryFn: () => fetchAccess(),
-  });
 
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
+  const handleSignOut = async () => {
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
-  }
+    navigate({ to: "/auth" as any });
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-navy-gradient text-primary-foreground">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 sm:flex sm:justify-between">
-          <Link to="/admin" className="flex min-w-0 items-center gap-3">
-            <img
-              src={logo.url}
-              alt="Career Consultation Services logo"
-              width={40}
-              height={40}
-              className="h-10 w-10 shrink-0 rounded-md object-cover"
-            />
-            <span className="min-w-0">
-              <span className="block truncate font-display text-sm font-extrabold uppercase">
-                Staff Dashboard
-              </span>
-              <span className="block truncate text-xs text-primary-foreground/70">
-                Career Consultation Services
-              </span>
-            </span>
-          </Link>
-          <div className="flex shrink-0 items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="hidden text-primary-foreground hover:bg-primary-foreground/10 sm:inline-flex">
-              <Link to="/">View website</Link>
-            </Button>
-            <Button
-              onClick={signOut}
-              size="sm"
-              variant="ghost"
-              className="text-primary-foreground hover:bg-primary-foreground/10"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign out
-            </Button>
+    <div className="flex min-h-screen flex-col bg-slate-100/70 text-slate-900 font-sans antialiased">
+      {/* Top Header */}
+      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75">
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <Link to="/admin" className="flex items-center gap-3">
+              <img
+                src="/CCS logo.jpeg"
+                alt="CCS Logo"
+                className="h-10 w-10 rounded-lg border border-slate-200 object-contain p-0.5 shadow-sm"
+              />
+              <div>
+                <span className="block font-display text-sm font-black uppercase tracking-tight text-primary">
+                  Staff Command Center
+                </span>
+                <span className="block text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Career Consultant Services
+                </span>
+              </div>
+            </Link>
           </div>
-        </div>
-      </header>
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-8">
-        {isLoading ? (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Checking your access…
+          {/* Desktop Right */}
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              <span>Admin Verified</span>
+            </div>
+
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleSignOut}
+              className="gap-1.5 rounded-full border-slate-300 text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Sign Out</span>
+            </Button>
           </div>
-        ) : access?.isStaff ? (
-          children
-        ) : (
-          <div className="mx-auto max-w-lg rounded-xl border border-border bg-card p-8 text-center shadow-card">
-            <ShieldAlert className="mx-auto h-10 w-10 text-accent" />
-            <h1 className="mt-4 font-display text-xl font-extrabold uppercase text-primary">
-              Access not approved yet
-            </h1>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Your account exists but has not been given staff access. Ask an administrator at Career
-              Consultation Services to approve it.
-            </p>
-            <Button onClick={signOut} className="mt-6" variant="outline">
-              Sign out
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            className="rounded-lg p-2 text-slate-600 sm:hidden hover:bg-slate-100"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <div className="border-b border-slate-200 bg-white px-4 py-3 sm:hidden space-y-2">
+            <div className="text-xs font-semibold text-slate-500">
+              Logged in as Senior Admissions Consultant
+            </div>
+            <Button size="sm" variant="outline" onClick={handleSignOut} className="w-full text-rose-600 text-xs">
+              Sign Out
             </Button>
           </div>
         )}
-      </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-7xl">{children}</div>
+      </main>
     </div>
   );
 }

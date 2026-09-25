@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileUp, GraduationCap, Search, ShieldCheck, ClipboardList, Users } from "lucide-react";
 import hero from "@/assets/hero-students.jpg";
-import logo from "@/assets/ccs-logo.jpeg.asset.json";
 import { SiteLayout, CONTACT } from "@/components/site-layout";
 import { Button } from "@/components/ui/button";
 
@@ -25,7 +24,7 @@ export const Route = createFileRoute("/")({
 });
 
 const STEPS = [
-  { icon: ClipboardList, title: "Submit your information", text: "Share your personal and school details." },
+  { icon: ClipboardList, title: "Create Your Account", text: "Sign up securely to open your applicant profile." },
   { icon: FileUp, title: "Upload your documents", text: "ID, results, matric certificate, proof of payment." },
   { icon: Search, title: "We assess your results", text: "Our consultants review your academic record." },
   { icon: GraduationCap, title: "We identify institutions", text: "You see where you may qualify." },
@@ -38,13 +37,13 @@ function Home() {
       <section className="bg-navy-gradient text-primary-foreground">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-14 md:py-20 lg:grid-cols-2">
           <div>
-            <img
-              src={logo.url}
-              alt="Career Consultation Services logo"
-              width={88}
-              height={88}
-              className="mb-6 h-20 w-20 rounded-lg object-cover"
-            />
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-lg border border-white/20 bg-white/10 p-1.5 shadow-sm backdrop-blur-sm">
+              <img
+                src="/CCS logo.jpeg"
+                alt="Career Consultation Services logo"
+                className="h-full w-full object-contain rounded-md"
+              />
+            </div>
             <h1 className="font-display text-3xl font-extrabold uppercase leading-tight sm:text-4xl md:text-5xl">
               Submit your results. Know where you qualify.
             </h1>
@@ -54,7 +53,7 @@ function Home() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="secondary">
-                <Link to="/submit">Submit Your Documents</Link>
+                <Link to="/auth">Get Started</Link>
               </Button>
               <Button
                 asChild
@@ -62,7 +61,7 @@ function Home() {
                 variant="outline"
                 className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
               >
-                <Link to="/status">Check Where You Qualify</Link>
+                <Link to="/auth">Sign In / Sign Up</Link>
               </Button>
             </div>
           </div>
@@ -130,7 +129,7 @@ function Home() {
           </ol>
           <div className="mt-8">
             <Button asChild size="lg">
-              <Link to="/submit">Get Started</Link>
+              <Link to="/auth">Get Started</Link>
             </Button>
           </div>
         </div>
@@ -140,7 +139,14 @@ function Home() {
         <div className="rounded-xl border border-border bg-card p-8 shadow-card">
           <h2 className="font-display text-xl font-extrabold uppercase text-primary">Talk to us</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Phone {CONTACT.phone} · WhatsApp {CONTACT.whatsapp} · {CONTACT.email}
+            Call or WhatsApp:{" "}
+            <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" className="font-medium underline hover:text-primary">
+              {CONTACT.phone}
+            </a>{" "}
+            · Email:{" "}
+            <a href={`mailto:${CONTACT.email}`} className="font-medium underline hover:text-primary">
+              {CONTACT.email}
+            </a>
           </p>
           <Button asChild variant="outline" className="mt-5">
             <Link to="/contact">Contact Us</Link>
