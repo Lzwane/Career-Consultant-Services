@@ -83,52 +83,130 @@ export type Database = {
       }
       applications: {
         Row: {
+          address: string | null
+          aps: number | null
+          city: string | null
           created_at: string
+          date_of_birth: string | null
+          disability: string | null
           email: string
+          exam_body: string | null
           field_of_interest: string | null
-          full_name: string
-          grade_status: string
+          first_choice: string | null
+          first_name: string | null
+          full_name: string | null
+          funding: string | null
+          gender: string | null
+          grade_status: string | null
+          guardian_email: string | null
+          guardian_name: string | null
+          guardian_phone: string | null
+          guardian_relationship: string | null
+          home_language: string | null
           id: string
-          id_number: string
+          id_number: string | null
+          matric_year: string | null
+          nationality: string | null
           notes: string | null
-          phone: string
+          phone: string | null
+          postal_code: string | null
+          preferred_institutions: string | null
           province: string | null
           reference_code: string
           school: string | null
+          second_choice: string | null
           status: Database["public"]["Enums"]["application_status"]
+          subjects: Json
+          submitted: boolean
+          surname: string | null
+          third_choice: string | null
+          title: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
+          address?: string | null
+          aps?: number | null
+          city?: string | null
           created_at?: string
+          date_of_birth?: string | null
+          disability?: string | null
           email: string
+          exam_body?: string | null
           field_of_interest?: string | null
-          full_name: string
-          grade_status: string
+          first_choice?: string | null
+          first_name?: string | null
+          full_name?: string | null
+          funding?: string | null
+          gender?: string | null
+          grade_status?: string | null
+          guardian_email?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relationship?: string | null
+          home_language?: string | null
           id?: string
-          id_number: string
+          id_number?: string | null
+          matric_year?: string | null
+          nationality?: string | null
           notes?: string | null
-          phone: string
-          province?: string | null
-          reference_code: string
-          school?: string | null
-          status?: Database["public"]["Enums"]["application_status"]
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          field_of_interest?: string | null
-          full_name?: string
-          grade_status?: string
-          id?: string
-          id_number?: string
-          notes?: string | null
-          phone?: string
+          phone?: string | null
+          postal_code?: string | null
+          preferred_institutions?: string | null
           province?: string | null
           reference_code?: string
           school?: string | null
+          second_choice?: string | null
           status?: Database["public"]["Enums"]["application_status"]
+          subjects?: Json
+          submitted?: boolean
+          surname?: string | null
+          third_choice?: string | null
+          title?: string | null
           updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          aps?: number | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          disability?: string | null
+          email?: string
+          exam_body?: string | null
+          field_of_interest?: string | null
+          first_choice?: string | null
+          first_name?: string | null
+          full_name?: string | null
+          funding?: string | null
+          gender?: string | null
+          grade_status?: string | null
+          guardian_email?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relationship?: string | null
+          home_language?: string | null
+          id?: string
+          id_number?: string | null
+          matric_year?: string | null
+          nationality?: string | null
+          notes?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          preferred_institutions?: string | null
+          province?: string | null
+          reference_code?: string
+          school?: string | null
+          second_choice?: string | null
+          status?: Database["public"]["Enums"]["application_status"]
+          subjects?: Json
+          submitted?: boolean
+          surname?: string | null
+          third_choice?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -228,6 +306,7 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      owns_application: { Args: { _app: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "staff"
