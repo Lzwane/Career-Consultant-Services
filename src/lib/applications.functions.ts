@@ -2,54 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { ApplicationStatus } from "@/lib/status";
 
-/** Public: learner looks up their own application with reference code + ID number. */
-export const lookupApplication = createServerFn({ method: "POST" })
-  .inputValidator((input: { reference: string; idNumber: string }) => ({
-    reference: String(input.reference ?? "").trim().toUpperCase(),
-    idNumber: String(input.idNumber ?? "").trim(),
-  }))
-  .handler(async ({ data }) => {
-    if (data.reference.length < 6 || data.idNumber.length < 6) {
-      return { found: false as const };
-    }
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const { data: application } = await supabaseAdmin
-      .from("applications")
-      .select("id, reference_code, full_name, status, created_at, updated_at")
-      .eq("reference_code", data.reference)
-      .eq("id_number", data.idNumber)
-      .maybeSingle();
-
-    if (!application) return { found: false as const };
-
-    const [{ data: eligibility }, { data: updates }, { data: documents }] = await Promise.all([
-      supabaseAdmin
-        .from("eligibility_results")
-        .select("institution, programme, requirements, meets_requirements, application_status, notes")
-        .eq("application_id", application.id)
-        .order("created_at", { ascending: true }),
-      supabaseAdmin
-        .from("application_updates")
-        .select("message, status, created_at")
-        .eq("application_id", application.id)
-        .order("created_at", { ascending: false }),
-      supabaseAdmin
-        .from("application_documents")
-        .select("doc_type, file_name, created_at")
-        .eq("application_id", application.id)
-        .order("created_at", { ascending: true }),
-    ]);
-
-    return {
-      found: true as const,
-      application,
-      eligibility: eligibility ?? [],
-      updates: updates ?? [],
-      documents: documents ?? [],
-    };
-  });
-
 /** Staff: is the signed-in user allowed into the admin area? */
 export const getStaffAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
